@@ -27,6 +27,8 @@ mv monitor /
 cd /monitor && make
 ```
 
+> monitor is built on top of [daptrace](https://github.com/daptrace/daptrace)
+
 ### Using Cijitter 
 To run the Cijitter, you can use `--runtime runsc-delay`:
 ```sh
