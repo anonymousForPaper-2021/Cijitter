@@ -574,7 +574,7 @@ func judge_delay(access [3]int, index int) bool {
 }
 
 //call kernel module to get target address
-var basePath string = "<please using your path>/monitor/"
+var basePath string = "/monitor/"
 var logPath string = basePath + "log/targetAddrs.list"
 var kernelPath string = basePath + "kernel/"
 
