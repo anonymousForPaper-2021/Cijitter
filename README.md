@@ -5,7 +5,6 @@ Cijitter is a crytomining defense tool, which consist of two components:
 - monitor: a kernel module using to profile the memory access of a task
 
 ## Usage
----
 
 ### Requirements
 - Linux ubuntu 5.4.0-70-generic
@@ -35,26 +34,3 @@ docker run -it --runtime runsc-delay -m <memory size> <image>
 ```
 
 > Note: the runsc only provide 2G memory for container by default, `-m` is required for assign larger memory for container.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
