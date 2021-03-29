@@ -185,7 +185,6 @@ type Args struct {
 	// UserLogFD is the file descriptor to write user logs to.
 	UserLogFD int
 
-	//LIZHI
 	AddrFD int
 }
 

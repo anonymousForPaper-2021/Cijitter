@@ -66,7 +66,6 @@ type Gofer struct {
 	specFD       int
 	mountsFD     int
 
-	//lizhi
 	addrFD		int
 }
 

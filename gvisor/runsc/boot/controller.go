@@ -34,8 +34,6 @@ import (
 	"gvisor.dev/gvisor/pkg/urpc"
 	"gvisor.dev/gvisor/runsc/boot/pprof"
 	"gvisor.dev/gvisor/runsc/specutils"
-
-	//lizhi
 )
 
 const (

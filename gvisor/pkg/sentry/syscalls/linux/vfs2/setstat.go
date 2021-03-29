@@ -23,21 +23,12 @@ import (
 	"gvisor.dev/gvisor/pkg/sentry/vfs"
 	"gvisor.dev/gvisor/pkg/syserror"
 	"gvisor.dev/gvisor/pkg/usermem"
-
-	//lizhi
-	"os/exec"
-	"gvisor.dev/gvisor/pkg/log"
 )
 
 const chmodMask = 0777 | linux.S_ISUID | linux.S_ISGID | linux.S_ISVTX
 
 // Chmod implements Linux syscall chmod(2).
 func Chmod(t *kernel.Task, args arch.SyscallArguments) (uintptr, *kernel.SyscallControl, error) {
-	//lizhi
-	cmd := exec.Command("/bin/bash", "-c", "pwd")
-	out, _ := cmd.Output()
-	log.Debugf("[LIZHI] hhhhhhhhhhhhhh, out %s", out)
-
 	pathAddr := args[0].Pointer()
 	mode := args[1].ModeT()
 	return 0, nil, fchmodat(t, linux.AT_FDCWD, pathAddr, mode)

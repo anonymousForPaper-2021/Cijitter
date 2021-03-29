@@ -10,8 +10,8 @@ import (
 
 // multiple address
 type TargetAddrs struct {
-        sync.Mutex
-        Addrs map[usermem.Addr]int
+   sync.Mutex
+   Addrs map[usermem.Addr]int
 }
 
 func NewTargetAddrs() *TargetAddrs {
@@ -37,9 +37,9 @@ func NewTargetAddr() *TargetAddr {
 
 // storing the original perms of target addresses
 type ModAddr struct {
-        sync.Mutex
-        //modified map[usermem.Addr]int
-        Perms map[usermem.Addr]usermem.AccessType
+   sync.Mutex
+   //modified map[usermem.Addr]int
+   Perms map[usermem.Addr]usermem.AccessType
 }
 
 func NewModAddr() *ModAddr {
@@ -70,7 +70,7 @@ func Hex2addr(hexStr string) (usermem.Addr, error) {
     // remove 0x suffix if found in the input string
     cleaned := strings.Replace(hexStr, "0x", "", -1)
     cleaned = strings.Replace(cleaned, "\n", "", -1)
-    
+
     // base 16 for hexadecimal
     result, err := strconv.ParseUint(cleaned, 16, 64)
     if err != nil {
@@ -83,7 +83,7 @@ func Hex2addr(hexStr string) (usermem.Addr, error) {
 }
 
 func Listen_target_addrs(addrInfo string) {
-	log.Debugf("[Cijitter] Get Target Address: %s\n", addrInfo)
+    log.Debugf("[Cijitter] Get Target Address: %s\n", addrInfo)
 
     addr_acc := strings.Split(addrInfo, " ")
     if len(addr_acc) != 2 {
@@ -107,34 +107,25 @@ func Listen_target_addrs(addrInfo string) {
 
     log.Debugf("[Cijitter] sysno addr %x, %d\n", addr, access)
 
-	/*
-	// lizhi: cpuminer bitcoin -special
-    if addr == usermem.Addr(0x514000) {
-		log.Debugf("[Cijitter] sysno addr %x, %d, get wrong address\n", addr, access)
-		addr = usermem.Addr(0x516000)
-	}
-	*/
+    if addr == usermem.Addr(0) {
+	    log.Debugf("[Cijitter] addr is %x, stop delay...\n", addr)
+	    TAddr.Lock()
+	    TAddr.Addr = addr
+	    TAddr.Flag = false
+	    TAddr.Unlock()
+	    return
+    }
 
-    // lizhi: revision
-	if addr == usermem.Addr(0) {
-		log.Debugf("[Cijitter] addr is %x, stop delay...\n", addr)
-		TAddr.Lock()
-		TAddr.Addr = addr
-		TAddr.Flag = false
-		TAddr.Unlock()
-		return
-	}
+    //sleep time - Microsenconds, 400 is tf
+    sleep_time := (0.09 - float64(1/access/270)) * 10000000 - 400
+    log.Debugf("[Cijitter] sleep time is %f\n", sleep_time)
+    wait_time := 100000/access
 
-	//sleep time - Microsenconds, 400 is tf
-	sleep_time := (0.09 - float64(1/access/270)) * 10000000 - 400
-	log.Debugf("[Cijitter] sleep time is %f\n", sleep_time)
-	wait_time := 100000/access
-
-	// start to clear the addr's perms
-	TAddr.Lock()
-	TAddr.Addr = addr
-	TAddr.Flag = true
-	TAddr.SleepTime = int(sleep_time)
-	TAddr.WaitTime = int(wait_time) + 1
-	TAddr.Unlock()
+    // start to clear the addr's perms
+    TAddr.Lock()
+    TAddr.Addr = addr
+    TAddr.Flag = true
+    TAddr.SleepTime = int(sleep_time)
+    TAddr.WaitTime = int(wait_time) + 1
+    TAddr.Unlock()
 }

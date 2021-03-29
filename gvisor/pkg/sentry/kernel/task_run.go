@@ -28,13 +28,10 @@ import (
 	"gvisor.dev/gvisor/pkg/sentry/platform"
 	"gvisor.dev/gvisor/pkg/usermem"
 
-	//lizhi
 	"time"
 	"fmt"
-	//"strings"
 	"gvisor.dev/gvisor/pkg/log"
 	"gvisor.dev/gvisor/pkg/maid"
-	//"gvisor.dev/gvisor/pkg/sentry/mm"
 )
 
 // A taskRunState is a reified state in the task state machine. See README.md
@@ -64,14 +61,11 @@ type taskRunState interface {
 // make it visible in stack dumps. A goroutine for a given task can be identified
 // searching for Task.run()'s argument value.
 
-//lizhi
 func (t *Task) run(threadID uintptr) {
-	//lizhi: initial
 	t.tid = fmt.Sprintf("%s-%d", t.tc.Name, threadID)
 	t.pgf = true
 	t.atFlag = false
 
-	//lizhi: start delay montor
 	if t.tc.Name != "sh" && t.tc.Name != "bash" && t.tc.Name != "syscall"{
 		go t.monitor_timer()
 	}
@@ -112,7 +106,6 @@ func (t *Task) run(threadID uintptr) {
 		t.doStop()
 		t.runState = t.runState.execute(t)
 		if t.runState == nil {
-			//lizhi: clean the pgf log for dead thread
 			log.Debugf("[Cijitter] thread %s runState is nil: %s-7", t.tid, t.tc.Name)
 			t.pgf = false
 
@@ -290,8 +283,7 @@ func (app *runApp) execute(t *Task) taskRunState {
 	region := trace.StartRegion(t.traceContext, runRegion)
 	t.accountTaskGoroutineEnter(TaskGoroutineRunningApp)
 	info, at, err := t.p.Switch(t.MemoryManager().AddressSpace(), t.Arch(), t.rseqCPU)
-	
-	//lizhi
+
 	t.At = at
 	t.atFlag = true
 
@@ -304,13 +296,6 @@ func (app *runApp) execute(t *Task) taskRunState {
 
 	switch err {
 	case nil:
-		/* old version
-		lizhi: listen the target addr and clear its perms to trigger seg fault
-		if t.tc.Name != "sh" && t.tc.Name != "bash" { //&& t.tc.Name != "syscall"{
-			Listen_target_addrs(t)
-		}
-		*/
-
 		// Handle application system call.
 		return t.doSyscall()
 
@@ -342,11 +327,9 @@ func (app *runApp) execute(t *Task) taskRunState {
 			region := trace.StartRegion(t.traceContext, faultRegion)
 			addr := usermem.Addr(info.Addr())
 
-			//lizhi: refund the perms to the addrs modified by us
 			flag := false
 			if t.tc.Name != "sh" && t.tc.Name != "bash" {
 				Modify.Lock()
-				//lizhi: flag depicts if the addr is handled by us
 				flag = t.handle_seg_faults(addr)
 				if flag == false {
 					Modify.Unlock()
@@ -354,7 +337,6 @@ func (app *runApp) execute(t *Task) taskRunState {
 			}
 			
 			err := t.MemoryManager().HandleUserFault(t, addr, at, usermem.Addr(t.Arch().Stack()))
-			//lizhi; ensure the the refund processing is locked
 			if flag == true {
 				Modify.Unlock()
 			}
@@ -380,7 +362,6 @@ func (app *runApp) execute(t *Task) taskRunState {
 			}
 
 			// Faults are common, log only at debug level.
-			//lizhi add %s
 			t.Debugf("%s Unhandled user fault: addr=%x ip=%x access=%v err=%v", t.tid, addr, t.Arch().IP(), at, err)
 			t.DebugDumpState()
 

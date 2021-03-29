@@ -324,19 +324,18 @@ func New(conf *boot.Config, args Args) (*Container, error) {
 			}
 		}
 		if err := runInCgroup(cg, func() error {
-			//lizhi add: revAddr
+			//add: revAddr
 			ioFiles, specFile, err := c.createGoferProcess(args.Spec, conf, args.BundleDir, args.Attached)
 			if err != nil {
 				return err
 			}
 
-			//LIZHI: Create os.Pipe() to monitor and sandbox
+			//Create os.Pipe() to monitor and sandbox
 			reader, writer, err := os.Pipe()
-    		if err != nil {
-        		log.Debugf("[Cijitter] Create os.Pipe() to monitor and sandbox failed...")
-    		}
+		        if err != nil {
+				log.Debugf("[Cijitter] Create os.Pipe() to monitor and sandbox failed...")
+			}
 
-			//lizhi
 			c.createMonitorProcess(args.Spec, conf, args.BundleDir, args.Attached, writer)
 
 			// Start a new sandbox for this container. Any errors after this point
@@ -445,7 +444,6 @@ func (c *Container) Start(conf *boot.Config) error {
 			}
 			defer mountsFile.Close()
 
-			//lizhi
 			c.createMonitorProcess(c.Spec, conf, c.BundleDir, false, nil)
 
 			cleanMounts, err := specutils.ReadMounts(mountsFile)
@@ -876,7 +874,6 @@ func (c *Container) waitForStopped() error {
 	return backoff.Retry(op, b)
 }
 
-//lizhi
 func (c *Container) createMonitorProcess(spec *specs.Spec, conf *boot.Config, bundleDir string, attached bool, sender *os.File) ([]*os.File, *os.File, error) {
 	// Start with the general config flags.
 	args := conf.ToFlags()
@@ -966,7 +963,6 @@ func (c *Container) createMonitorProcess(spec *specs.Spec, conf *boot.Config, bu
 		nextFD++
 	}
 
-	//lizhi: add send and rev pair
 	goferEnds = append(goferEnds, sender)
 	args = append(args, fmt.Sprintf("--addr-fd=%d", nextFD))
 	nextFD++

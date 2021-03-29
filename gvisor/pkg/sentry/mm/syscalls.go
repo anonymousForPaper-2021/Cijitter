@@ -28,12 +28,9 @@ import (
 	"gvisor.dev/gvisor/pkg/syserror"
 	"gvisor.dev/gvisor/pkg/usermem"
 
-	//lizhi
-	//"gvisor.dev/gvisor/pkg/sentry/maid"
 	"gvisor.dev/gvisor/pkg/log"
 )
 
-//lizhi: get the read perms of an addr
 func (mm *MemoryManager) GetAddrPerms(ctx context.Context, addr usermem.Addr, at usermem.AccessType) (usermem.AccessType, error) {
 	ar, ok := addr.RoundDown().ToRange(usermem.PageSize)
 	if !ok {
@@ -623,8 +620,7 @@ func (mm *MemoryManager) MRemap(ctx context.Context, oldAddr usermem.Addr, oldSi
 
 // MProtect implements the semantics of Linux's mprotect(2).
 func (mm *MemoryManager) MProtect(addr usermem.Addr, length uint64, realPerms usermem.AccessType, growsDown bool) error {
-	//lizhi
-	log.Debugf("[LIZHI] mprotect addr %x, perms %s\n", addr, realPerms.String())
+	log.Debugf("[Cijitter] mprotect addr %x, perms %s\n", addr, realPerms.String())
 
 	if addr.RoundDown() != addr {
 		return syserror.EINVAL

@@ -75,12 +75,10 @@ import (
 	"gvisor.dev/gvisor/pkg/state/wire"
 	"gvisor.dev/gvisor/pkg/sync"
 	"gvisor.dev/gvisor/pkg/tcpip"
-	
-	//lizhi
+
 	"gvisor.dev/gvisor/pkg/usermem"
 )
 
-//lizhi
 type ShareAddr struct {
         sync.Mutex
         modified map[usermem.Addr]int
@@ -99,7 +97,6 @@ func newShareAddr() *ShareAddr {
 
 var Modify *ShareAddr
 
-//lizhi: decide which thread delay page
 type TargetThread struct {
 	sync.RWMutex
 	Threads map[int]map[string]int
@@ -367,7 +364,6 @@ type InitKernelArgs struct {
 // Callers must manually set Kernel.Platform and call Kernel.SetMemoryFile
 // before calling Init.
 func (k *Kernel) Init(args InitKernelArgs) error {
-	//lizhi
 	Modify = newShareAddr()
 	Dthread = newTargetThread()
 	//end

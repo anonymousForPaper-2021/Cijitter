@@ -87,7 +87,7 @@ type Boot struct {
 	// parent death signal doesn't propagate through execve when uid/gid changes.
 	attached bool
 
-	//---------LIZHI----------: send and recv
+	//send and recv
 	addrFD int
 }
 
@@ -123,7 +123,6 @@ func (b *Boot) SetFlags(f *flag.FlagSet) {
 	f.IntVar(&b.startSyncFD, "start-sync-fd", -1, "required FD to used to synchronize sandbox startup")
 	f.IntVar(&b.mountsFD, "mounts-fd", -1, "mountsFD is the file descriptor to read list of mounts after they have been resolved (direct paths, no symlinks).")
 	f.BoolVar(&b.attached, "attached", false, "if attached is true, kills the sandbox process when the parent process terminates")
-	//LIZHI
 	f.IntVar(&b.addrFD, "addr-fd", -1, "Cijitter: communicate with gofer and sandbox")
 }
 

@@ -556,7 +556,6 @@ type Task struct {
 	// startTime is protected by mu.
 	startTime ktime.Time
 
-	//lizhi
 	// pgf means if the thread is exited
 	pgf bool
 	// tid is an id of a thread

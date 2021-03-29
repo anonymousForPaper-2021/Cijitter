@@ -123,7 +123,6 @@ type Args struct {
 // New creates the sandbox process. The caller must call Destroy() on the
 // sandbox.
 func New(conf *boot.Config, args *Args) (*Sandbox, error) {
-	//lizhi add
 	//s := &Sandbox{ID: args.ID, Cgroup: args.Cgroup}
 	s := &Sandbox{ID: args.ID, Cgroup: args.Cgroup, RevAddr: args.RevAddr}
 

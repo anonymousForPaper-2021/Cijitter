@@ -26,7 +26,6 @@ import (
 	"gvisor.dev/gvisor/pkg/syserror"
 	"gvisor.dev/gvisor/pkg/usermem"
 
-	//lizhi
 	"fmt"
 	"gvisor.dev/gvisor/pkg/log"
 )
@@ -318,11 +317,9 @@ func (t *Task) Start(tid ThreadID) {
 	// Task is now running in system mode.
 	t.accountTaskGoroutineLeave(TaskGoroutineNonexistent)
 
-	//lizhi: init threads info
 	groupid := int(t.ThreadGroup().ID())
         id := fmt.Sprintf("%s-%d", t.tc.Name, int(tid))
 
-	//lizhi: all bash commands needed to be checked
 	if t.tc.Name != "sh" && t.tc.Name != "bash" && t.tc.Name != "syscall" {
 		Dthread.Lock()
 		if _, ok := Dthread.Threads[groupid]; !ok {
