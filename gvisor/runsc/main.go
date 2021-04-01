@@ -547,9 +547,8 @@ func judge_delay(access [3]int, index int) bool {
 	std := 0.0
 	for i := 0; i < 3; i++ {
 		std = std + (float64(access[i]) - mean) * (float64(access[i]) - mean)
-    }
+    	}
 	stddev := math.Sqrt(std)
-	dev := std/3.0
 
 	diff := 0
 	ratio := 0.0
@@ -581,33 +580,33 @@ var kernelPath string = basePath + "kernel/"
 //call kernel module to get target address
 func read_sample_logs() ([]string, map[string]int) {
 	var addr_access map[string]int
-    addr_access = make(map[string]int)
+    	addr_access = make(map[string]int)
 	var addrs_order []string
 	addr := "0x000000"
 	access := 0
 
-    fp, err := os.Open(logPath)
-    if err != nil {
+    	fp, err := os.Open(logPath)
+    	if err != nil {
 		log.Debugf("[Cijitter] read_sample_logs: open log file failed: %s", err)
 		return addrs_order, addr_access
-    }
-    defer fp.Close()
+    	}
+    	defer fp.Close()
 
-    data := make([]byte, 8)
-    var k int64
-    index := 0
-    loc := 0
+    	data := make([]byte, 8)
+    	var k int64
+    	index := 0
+    	loc := 0
 
-    for {
-        data = data[:cap(data)]
+    	for {
+        	data = data[:cap(data)]
 
-        // read bytes to slice
-        n, err := fp.Read(data)
-        if err != nil {
-            if err == io.EOF {
-                break
-            }
-            break
+        	// read bytes to slice
+        	n, err := fp.Read(data)
+        	if err != nil {
+            	if err == io.EOF {
+                	break
+            	}
+            	break
         }
 
         data = data[:n]
@@ -730,8 +729,8 @@ func get_target_addr() (string, int, bool) {
 		return addr, access, false
 	}
 
-    // strat kernel module
-    for _, pid := range targets {
+    	// strat kernel module
+    	for _, pid := range targets {
 		stat := chk_prerequisites()
 		if !stat {
 			return addr, access, false
