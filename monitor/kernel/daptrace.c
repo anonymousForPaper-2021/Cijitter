@@ -148,7 +148,7 @@ void hash_table_release(void)
 }
 
 // output the targets addrs
-#define FILE_WRITE "/home/zl/runsc/monitor/log/targetAddrs.list"
+#define FILE_WRITE "/monitor/log/targetAddrs.list"
 void output_targets_addr(void)
 {
         mm_segment_t fs;
